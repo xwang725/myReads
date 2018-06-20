@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import '../App.css';
 import Book from './Book';
-import * as BooksAPI from '../BooksAPI';
 
 export default class BookShelf extends Component {
 
@@ -22,10 +21,9 @@ export default class BookShelf extends Component {
                 return (
                 <li key={i + '_book'}>
                   <Book
-                    title={book.title}
-                    author={book.authors}
-                    backgroundImage={book.imageLinks.thumbnail}
+                    book={book}
                     shelf={this.props.shelfTitle}
+                    handleUpdateBookShelf={this.props.handleUpdateBookShelf}
                   />
                 </li>
                 )

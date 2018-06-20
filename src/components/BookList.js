@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import * as BooksAPI from '../BooksAPI';
 import '../App.css';
 import BookShelf from './BookShelf'
+import {Link} from 'react-router-dom'
 
 const SHELVES = [
   "currentlyReading",
@@ -17,7 +18,7 @@ export default class BookList extends Component {
     read: []
   }
 
-  componentDidMount() {
+  getAllBooks = () => {
     BooksAPI.getAll().then((books) => {
       this.setState({
         currentlyReading: books.filter(book => book.shelf === SHELVES[0]),
@@ -25,6 +26,18 @@ export default class BookList extends Component {
         read: books.filter(book => book.shelf === SHELVES[2])
       })
     })
+  }
+
+  componentDidMount() {
+    this.getAllBooks();
+  }
+
+  handleUpdateBookShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf)
+      .then( data => {
+        this.getAllBooks();
+      })
+    
   }
 
   camelCaseToRegular(word) {
@@ -41,6 +54,7 @@ export default class BookList extends Component {
         <div className="list-books-title">
           <h1>MyReads</h1>
         </div>
+        
         <div className="list-book-content">
           <div>
             {
@@ -50,11 +64,18 @@ export default class BookList extends Component {
                     key={i + "_shelf"}
                     shelfTitle={this.camelCaseToRegular(shelf)}
                     books={this.state[shelf]}
+                    handleUpdateBookShelf={this.handleUpdateBookShelf}
                   />
                 )
               })
             }
           </div>
+        </div>
+        <div className="open-search">
+          <Link
+            to="/search">
+              Add a book
+          </Link>
         </div>
       </div>
     )
