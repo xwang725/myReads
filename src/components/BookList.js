@@ -37,7 +37,6 @@ export default class BookList extends Component {
       .then( data => {
         this.getAllBooks();
       })
-    
   }
 
   camelCaseToRegular(word) {

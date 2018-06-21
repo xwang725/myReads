@@ -22,7 +22,6 @@ export default class BookShelf extends Component {
                 <li key={i + '_book'}>
                   <Book
                     book={book}
-                    shelf={this.props.shelfTitle}
                     handleUpdateBookShelf={this.props.handleUpdateBookShelf}
                   />
                 </li>

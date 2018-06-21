@@ -5,32 +5,27 @@ import '../App.css';
 class Book extends Component {
 
   state = {
-    shelf: "None"
+    shelf: "none"
   }
 
   componentDidMount() {
-    this.setState({
-      shelf: this.props.shelf
-    })
-  }
-
-  static defaultProps = {
-    title: "To Kill a Mockingbird",
-    author: "Harper Lee",
-    backgroundImage: "http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api",
-    shelf:"wantToRead"
+    this.getBookShelf();
   }
 
   changeShelf = (evt) => {
-    // TODO: need to update to DB as well
-    this.setState({
-      shelf: evt.target.value
-    })
-
     this.props.handleUpdateBookShelf(
       this.props.book, 
       evt.target.value
     )
+  }
+
+  getBookShelf = () => {
+    BooksAPI.get(this.props.book.id)
+      .then(b => {
+        this.setState({
+          shelf: b.shelf
+        })
+      })
   }
 
   render() {
@@ -39,7 +34,7 @@ class Book extends Component {
         <div className="book-top">
           <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.book.imageLinks.thumbnail})` }}></div>
           <div className="book-shelf-changer">
-            <select value={this.props.book.shelf} onChange={this.changeShelf}>
+            <select value={this.state.shelf} onChange={this.changeShelf}>
               <option value="move" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
@@ -49,7 +44,7 @@ class Book extends Component {
           </div>
         </div>
         <div className="book-title">{ this.props.book.title }</div>
-        <div className="book-authors">{ this.props.book.authors.join("\n") }</div>
+        <div className="book-authors">{ this.props.book.authors && this.props.book.authors.join("\n") }</div>
       </div>
     )
   }
